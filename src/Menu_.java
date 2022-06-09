@@ -14,13 +14,15 @@ import java.awt.*;
 public class Menu_ extends JFrame implements ActionListener {
     private JPanel panel1, panel2, panel3, panel4, panel5;
     private JButton start, help, exitGame, back, settingButton, volumnUP, volumnDOWN;
-    private JLabel background;
+    private JLabel background, volNum, volNumInit;
     private Icon setting, plus, minus;
+    private JSlider BGmusic;
+    private Integer vol4;
     private boolean onScreen = true;
     private boolean offScreen = false;
     Sound backgroundMusic;
     Sound rock;
-    JSlider BGmusic;
+    
 
     public Menu_() {
         super("Mandarin Square Capturing");
@@ -68,7 +70,7 @@ public class Menu_ extends JFrame implements ActionListener {
 
         // -----------------------------------------------------------------------------------
         // setting
-        setting = new ImageIcon(new javax.swing.ImageIcon("E:\\Data_analysis\\project oop DSAI\\OanQuan\\src\\setting.png").
+        setting = new ImageIcon(new javax.swing.ImageIcon("D:\\OanQuan-main\\OanQuan-main\\src\\setting.png").
                       getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
               
         settingButton = new JButton(setting);
@@ -86,7 +88,7 @@ public class Menu_ extends JFrame implements ActionListener {
         
         // ------------------------------------------------------------------------------------
         // control volumn of background music
-        plus = new ImageIcon(new javax.swing.ImageIcon("E:\\Data_analysis\\project oop DSAI\\OanQuan\\src\\plus.png").
+        plus = new ImageIcon(new javax.swing.ImageIcon("D:\\OanQuan-main\\OanQuan-main\\src\\plus.png").
                     getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 
         volumnUP = new JButton(plus);     
@@ -96,7 +98,7 @@ public class Menu_ extends JFrame implements ActionListener {
         volumnUP.setBorderPainted(false);
         volumnUP.setFocusPainted(false);
 
-        minus = new ImageIcon(new javax.swing.ImageIcon("E:\\Data_analysis\\project oop DSAI\\OanQuan\\src\\minus.png").
+        minus = new ImageIcon(new javax.swing.ImageIcon("D:\\OanQuan-main\\OanQuan-main\\src\\minus.png").
                     getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 
         volumnDOWN = new JButton(minus);     
@@ -105,10 +107,21 @@ public class Menu_ extends JFrame implements ActionListener {
         volumnDOWN.setContentAreaFilled(false);
         volumnDOWN.setBorderPainted(false);
         volumnDOWN.setFocusPainted(false);
-
-
+        
+        
+        panel5 = new JPanel();
+        panel5.setBounds(100, 200, 500, 100);
+        panel5.setOpaque(false);
+        panel5.setVisible(false);
+        panel5.add(volumnUP);
+        panel5.add(volumnDOWN);
+        
+        volNum = new JLabel();
+        volNum.setText("25");
+        
         BGmusic = new JSlider(-40, 6);
-        BGmusic.setOpaque(false);
+        BGmusic.setOpaque(true);
+        BGmusic.setBackground(Color.BLACK);
         BGmusic.addChangeListener(new ChangeListener() {
 
             @Override
@@ -117,23 +130,24 @@ public class Menu_ extends JFrame implements ActionListener {
                 if (backgroundMusic.curentVolumn == -40) {
                     backgroundMusic.curentVolumn = -80;
                 }
-                backgroundMusic.fc.setValue(backgroundMusic.curentVolumn);              
+                backgroundMusic.fc.setValue(backgroundMusic.curentVolumn);
+                int vol = BGmusic.getValue();
+                float vol2 = (float)vol;
+                float vol3 = (vol2 + 40) / 46 * 50;
+                vol4 = Math.round(vol3);
+               
+                volNum.setText(vol4.toString());
             }
         });
-
         
-        panel5 = new JPanel();
-        panel5.setBounds(100, 200, 500, 100);
-        panel5.setOpaque(false);
-        panel5.setVisible(false);
-        panel5.add(volumnUP);
-        panel5.add(volumnDOWN);
         panel5.add(BGmusic);
-
+        panel5.add(volNum);
+     
+        
     
         // ---------------------------------------------------------------------------------------
         background = new JLabel();
-        background.setIcon(new ImageIcon("E:\\Data_analysis\\project oop DSAI\\OanQuan\\src\\gameBG.jpg"));    
+        background.setIcon(new ImageIcon("D:\\OanQuan-main\\OanQuan-main\\src\\gameBG.jpg"));    
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1000, 800);
@@ -147,7 +161,7 @@ public class Menu_ extends JFrame implements ActionListener {
         this.add(background);
         this.setVisible(true); 
 
-        File f = new File("E:\\Data_analysis\\project oop DSAI\\OanQuan\\src\\bgmusic.wav");
+        File f = new File("D:\\OanQuan-main\\OanQuan-main\\src\\bgmusic.wav");
         this.playBackgroundMusic(f);
 
     }
@@ -178,8 +192,21 @@ public class Menu_ extends JFrame implements ActionListener {
             panel5.setVisible(true);
         } else if (e.getSource() == volumnUP) {
             backgroundMusic.volumnUp();
+            BGmusic.setValue(BGmusic.getValue() + 1);
+            vol4 = vol4 + 1;
+            if (vol4 > 50) {
+            	vol4 = 50;
+            }
+            volNum.setText(vol4.toString());
+            
         } else if (e.getSource() == volumnDOWN) {
             backgroundMusic.volumnDown();
+            BGmusic.setValue(BGmusic.getValue() - 1);
+            vol4 = vol4 - 1;
+            if (vol4 < 0) {
+            	vol4 = 0;
+            }
+            volNum.setText(vol4.toString());
         }
     }
 
