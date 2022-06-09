@@ -11,11 +11,14 @@ import java.awt.*;
 
 
 public class Menu_ extends JFrame implements ActionListener {
-    private JPanel panel1, panel2, panel3, panel4;
-    private JButton b1, b2, b3, b4, b5;
+    private JPanel panel1, panel2, panel3, panel4, panel5;
+    private JButton start, help, exitGame, back, settingButton, volumnUP, volumnDOWN;
     private JLabel background;
     private Icon setting;
-    ActionListener e;
+    private boolean onScreen = true;
+    private boolean offScreen = false;
+    Sound backgroundMusic;
+    Sound rock;
 
     Menu_() {
         super("Mandarin Square Capturing");
@@ -24,24 +27,24 @@ public class Menu_ extends JFrame implements ActionListener {
         panel1.setBounds(350, 250, 300, 200);
         panel1.setOpaque(false);
 
-        b1 = new JButton("Start");     
-        b1.setPreferredSize(new Dimension(300, 60));  
-        // b1.setOpaque(false);
-        b1.addActionListener(this);
+        start = new JButton("Start");     
+        start.setPreferredSize(new Dimension(300, 60));  
+        // start.setOpaque(false);
+        start.addActionListener(this);
 
-        b2 = new JButton("Help");   
-        b2.setPreferredSize(new Dimension(300, 60));    
-        // b2.setOpaque(false);
-        b2.addActionListener(this);
+        help = new JButton("Help");   
+        help.setPreferredSize(new Dimension(300, 60));    
+        // help.setOpaque(false);
+        help.addActionListener(this);
 
-        b3 = new JButton("Exit");     
-        b3.setPreferredSize(new Dimension(300, 60));  
-        // b3.setOpaque(false);
-        b3.addActionListener(this);
+        exitGame = new JButton("Exit");     
+        exitGame.setPreferredSize(new Dimension(300, 60));  
+        // exitGame.setOpaque(false);
+        exitGame.addActionListener(this);
  
-        panel1.add(b1);
-        panel1.add(b2);
-        panel1.add(b3);
+        panel1.add(start);
+        panel1.add(help);
+        panel1.add(exitGame);
 
         // ----------------------------------------------------------------------------------
         // help 
@@ -51,32 +54,51 @@ public class Menu_ extends JFrame implements ActionListener {
         panel2.setVisible(false);
         
         // -----------------------------------------------------------------------------------
-        b4 = new JButton("Exit");     
-        b4.setPreferredSize(new Dimension(80, 60));  
-        b4.addActionListener(this);
+        back = new JButton("Exit");     
+        back.setPreferredSize(new Dimension(80, 60));  
+        back.addActionListener(this);
 
         panel3 = new JPanel();
-        panel3.setBounds(900, 0, 80, 70);
+        panel3.setBounds(0, 0, 80, 70);
         panel3.setOpaque(false);
         panel3.setVisible(false);
-        panel3.add(b4);
+        panel3.add(back);
 
         // -----------------------------------------------------------------------------------
         // setting
         setting = new ImageIcon(new javax.swing.ImageIcon("E:\\Data_analysis\\project oop DSAI\\OanQuan\\src\\setting.png").
                       getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
               
-        b5 = new JButton(setting);
-        b5.setPreferredSize(new Dimension(80, 60));  
-        b5.addActionListener(this);
-        b5.setOpaque(false);
-        b5.setContentAreaFilled(false);
-        b5.setBorderPainted(false);
+        settingButton = new JButton(setting);
+        settingButton.setPreferredSize(new Dimension(80, 60));  
+        settingButton.addActionListener(this);
+        settingButton.setOpaque(false);
+        settingButton.setContentAreaFilled(false);
+        settingButton.setBorderPainted(false);
+        settingButton.setFocusPainted(false);
 
         panel4 = new JPanel();
         panel4.setBounds(900, 0, 80, 70);
         panel4.setOpaque(false);
-        panel4.add(b5);
+        panel4.add(settingButton);
+        
+        // ------------------------------------------------------------------------------------
+        // control volumn
+        volumnUP = new JButton("up");     
+        volumnUP.setPreferredSize(new Dimension(80, 60)); 
+        volumnUP.addActionListener(this);
+
+        volumnDOWN = new JButton("down");     
+        volumnDOWN.setPreferredSize(new Dimension(80, 60));  
+        volumnDOWN.addActionListener(this);
+
+        panel5 = new JPanel();
+        panel5.setBounds(200, 200, 170, 70);
+        panel5.setOpaque(false);
+        panel5.setVisible(false);
+        panel5.add(volumnUP);
+        panel5.add(volumnDOWN);
+
 
     
         // ---------------------------------------------------------------------------------------
@@ -91,51 +113,53 @@ public class Menu_ extends JFrame implements ActionListener {
         this.add(panel2);
         this.add(panel3);
         this.add(panel4);
+        this.add(panel5);
 
         this.add(background);
         this.setVisible(true); 
 
         File f = new File("E:\\Data_analysis\\project oop DSAI\\OanQuan\\src\\bgmusic.wav");
-        this.playSound(f);
+        this.playBackgroundMusic(f);
 
     }
 
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == b1) {
+        if (e.getSource() == start) {
             panel1.setVisible(false);
             panel3.setVisible(true);
-        } else if (e.getSource() == b3) {
+            panel4.setVisible(false);
+        } else if (e.getSource() == exitGame) {
             this.dispose();
-        } else if (e.getSource() == b2) {
+        } else if (e.getSource() == help) {
             panel1.setVisible(false);
             panel2.setVisible(true);
             panel3.setVisible(true);
-        } else if (e.getSource() == b4) {
+            panel4.setVisible(false);
+        } else if (e.getSource() == back) {
             panel1.setVisible(true);
             panel2.setVisible(false);
             panel3.setVisible(false);
+            panel4.setVisible(true);
+            panel5.setVisible(false);
+        } else if (e.getSource() == settingButton) {
+            panel1.setVisible(false);
+            panel3.setVisible(true);
+            panel4.setVisible(false);
+            panel5.setVisible(true);
+        } else if (e.getSource() == volumnUP) {
+            backgroundMusic.volumnUp();
+        } else if (e.getSource() == volumnDOWN) {
+            backgroundMusic.volumnDown();
         }
     }
 
 
-    public void playSound(File url) {
-        new Thread(new Runnable() {
-          public void run() {
-            try {
-              Clip clip = AudioSystem.getClip();
-              AudioInputStream inputStream = AudioSystem.getAudioInputStream(url);
-              clip.open(inputStream);
-              clip.start(); 
-              clip.loop(Clip.LOOP_CONTINUOUSLY);
-
-            } catch (Exception e) {
-              System.err.println(e.getMessage());
-            }
-          }
-        }).start();
-      }
-
+    public void playBackgroundMusic(File url) {
+        backgroundMusic = new Sound();
+        backgroundMusic.playSound(url);
+    }
+        
 
     public static void main(String[] args) {
         new Menu_();   
