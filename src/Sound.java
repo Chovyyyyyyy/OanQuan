@@ -4,7 +4,7 @@ import java.io.*;
 public class Sound {
     Clip clip;
     float previousVolumn = 0;
-    float curentVolumn = 0;
+    float curentVolumn = -17;
     FloatControl fc;
     boolean mute = false;
 

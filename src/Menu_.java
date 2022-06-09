@@ -2,11 +2,12 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
-import javax.sound.sampled.*;
 import java.io.*;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.awt.*;
 
 
@@ -14,13 +15,14 @@ public class Menu_ extends JFrame implements ActionListener {
     private JPanel panel1, panel2, panel3, panel4, panel5;
     private JButton start, help, exitGame, back, settingButton, volumnUP, volumnDOWN;
     private JLabel background;
-    private Icon setting;
+    private Icon setting, plus, minus;
     private boolean onScreen = true;
     private boolean offScreen = false;
     Sound backgroundMusic;
     Sound rock;
+    JSlider BGmusic;
 
-    Menu_() {
+    public Menu_() {
         super("Mandarin Square Capturing");
 
         panel1 = new JPanel();
@@ -29,17 +31,17 @@ public class Menu_ extends JFrame implements ActionListener {
 
         start = new JButton("Start");     
         start.setPreferredSize(new Dimension(300, 60));  
-        // start.setOpaque(false);
+        start.setContentAreaFilled(false);
         start.addActionListener(this);
 
         help = new JButton("Help");   
         help.setPreferredSize(new Dimension(300, 60));    
-        // help.setOpaque(false);
+        help.setContentAreaFilled(false);
         help.addActionListener(this);
 
         exitGame = new JButton("Exit");     
         exitGame.setPreferredSize(new Dimension(300, 60));  
-        // exitGame.setOpaque(false);
+        exitGame.setContentAreaFilled(false);
         exitGame.addActionListener(this);
  
         panel1.add(start);
@@ -83,28 +85,55 @@ public class Menu_ extends JFrame implements ActionListener {
         panel4.add(settingButton);
         
         // ------------------------------------------------------------------------------------
-        // control volumn
-        volumnUP = new JButton("up");     
-        volumnUP.setPreferredSize(new Dimension(80, 60)); 
+        // control volumn of background music
+        plus = new ImageIcon(new javax.swing.ImageIcon("E:\\Data_analysis\\project oop DSAI\\OanQuan\\src\\plus.png").
+                    getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+
+        volumnUP = new JButton(plus);     
+        volumnUP.setPreferredSize(new Dimension(50, 60)); 
         volumnUP.addActionListener(this);
+        volumnUP.setContentAreaFilled(false);
+        volumnUP.setBorderPainted(false);
+        volumnUP.setFocusPainted(false);
 
-        volumnDOWN = new JButton("down");     
-        volumnDOWN.setPreferredSize(new Dimension(80, 60));  
+        minus = new ImageIcon(new javax.swing.ImageIcon("E:\\Data_analysis\\project oop DSAI\\OanQuan\\src\\minus.png").
+                    getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+
+        volumnDOWN = new JButton(minus);     
+        volumnDOWN.setPreferredSize(new Dimension(50, 60));  
         volumnDOWN.addActionListener(this);
+        volumnDOWN.setContentAreaFilled(false);
+        volumnDOWN.setBorderPainted(false);
+        volumnDOWN.setFocusPainted(false);
 
+
+        BGmusic = new JSlider(-40, 6);
+        BGmusic.setOpaque(false);
+        BGmusic.addChangeListener(new ChangeListener() {
+
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                backgroundMusic.curentVolumn = BGmusic.getValue();
+                if (backgroundMusic.curentVolumn == -40) {
+                    backgroundMusic.curentVolumn = -80;
+                }
+                backgroundMusic.fc.setValue(backgroundMusic.curentVolumn);              
+            }
+        });
+
+        
         panel5 = new JPanel();
-        panel5.setBounds(200, 200, 170, 70);
+        panel5.setBounds(100, 200, 500, 100);
         panel5.setOpaque(false);
         panel5.setVisible(false);
         panel5.add(volumnUP);
         panel5.add(volumnDOWN);
-
+        panel5.add(BGmusic);
 
     
         // ---------------------------------------------------------------------------------------
         background = new JLabel();
-        background.setIcon(new ImageIcon("E:\\Data_analysis\\project oop DSAI\\OanQuan\\src\\gameBG.jpg"));
-        
+        background.setIcon(new ImageIcon("E:\\Data_analysis\\project oop DSAI\\OanQuan\\src\\gameBG.jpg"));    
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1000, 800);
